@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Applies saved appearance (font, color, background) before first paint — must stay first, as a classic (non-module) script, to avoid a flash of default styling. -->
+<script src="appearance-core.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>My listings — HostelHive</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#080705">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="dark">
+  <div class="bubble-field" aria-hidden="true">
+    <span style="left:8%; width:16px; height:16px; animation-duration:6.5s;"></span>
+    <span style="left:22%; width:10px; height:10px; animation-duration:8s; animation-delay:1s;"></span>
+    <span style="left:71%; width:14px; height:14px; animation-duration:7s; animation-delay:.4s;"></span>
+    <span style="left:88%; width:9px; height:9px; animation-duration:9s; animation-delay:2s;"></span>
+  </div>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">Hostel<em>Hive</em></div>
+      <div class="topbar-actions">
+        <div id="notif-mount" class="notif-mount"></div>
+        <button id="logout-btn" class="btn ghost small" type="button">Log out</button>
+      </div>
+    </div>
+    <div id="nav-mount"></div>
+
+    <h1 style="margin-top:32px;">My listings</h1>
+    <p class="muted">Everything you upload here is fully visible to every student — price, distance, and necessities, no locked info.</p>
+
+    <div id="feedback-card" class="card" style="margin-bottom:18px; display:none;">
+      <h3 class="mt-0">&#10024; Feedback on your listings</h3>
+      <p id="feedback-summary" class="muted" style="font-size:13px;"></p>
+      <div id="feedback-list" class="appreciation-list"></div>
+      <button id="clear-feedback" class="btn ghost small" type="button" style="margin-top:12px;">Clear all</button>
+    </div>
+
+    <div class="detail-wrap">
+      <div>
+        <div class="card">
+          <label>Your photo</label>
+          <div class="photo-upload-row">
+            <img id="photo-preview" class="photo-preview" src="" alt="Your photo">
+            <div>
+              <div class="upload-btn-wrap btn subtle small">
+                Choose photo
+                <input id="photoFile" type="file" accept="image/*">
+              </div>
+              <div class="upload-hint">This is what students see when you message them about a listing.</div>
+            </div>
+          </div>
+
+          <label for="name">Your name</label>
+          <input id="name" type="text">
+          <label for="phone">Phone / WhatsApp</label>
+          <input id="phone" type="text" placeholder="e.g. 07XX XXX XXX">
+          <label class="consent-row" for="show-online-status" style="margin-top:16px;">
+            <input type="checkbox" id="show-online-status" checked>
+            Show "active recently" to students you chat with
+          </label>
+          <button id="save-account" class="btn block" style="margin-top:20px;">Save account</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h3 class="mt-0" id="listing-form-title">Add a hostel</h3>
+          <label for="h-name">Hostel name</label>
+          <input id="h-name" type="text" placeholder="e.g. Sunrise Student Hostel">
+
+          <div class="filters-card" style="margin-top:12px;">
+            <div>
+              <label for="h-price">Price (KES/month)</label>
+              <input id="h-price" type="number" min="0" step="500">
+            </div>
+            <div>
+              <label for="h-distance">Distance to campus (km)</label>
+              <input id="h-distance" type="number" min="0" step="0.1">
+            </div>
+            <div>
+              <label for="h-area">Area / neighborhood</label>
+              <input id="h-area" type="text" placeholder="e.g. Kikuyu">
+            </div>
+            <div>
+              <label for="h-address">Exact address (optional)</label>
+              <input id="h-address" type="text" placeholder="Street / landmark">
+            </div>
+          </div>
+
+          <label class="mt-0" style="display:block; margin:16px 0 6px;">Necessities</label>
+          <div id="h-necessities" class="filters-card necessities-check"></div>
+
+          <label for="h-description" style="margin-top:16px;">Description</label>
+          <textarea id="h-description" placeholder="What makes this place worth a look — room sizes, house rules, nearby shops…"></textarea>
+
+          <label for="h-contact" style="margin-top:12px;">Contact for this listing</label>
+          <input id="h-contact" type="text" placeholder="Phone, WhatsApp, or leave blank to use messages only">
+
+          <label style="margin-top:16px;">Photos</label>
+          <div class="upload-btn-wrap btn subtle small">
+            Add photos
+            <input id="h-photos-file" type="file" accept="image/*" multiple>
+          </div>
+          <div id="h-photos-preview" class="photo-strip" style="margin-top:12px;"></div>
+          <p class="field-hint">The first photo is the cover shown on Browse. All photos are public — nothing is hidden behind a code.</p>
+
+          <div style="display:flex; gap:10px; margin-top:20px;">
+            <button id="save-listing" class="btn block" style="flex:1;">Publish listing</button>
+            <button id="cancel-edit" class="btn ghost" type="button" style="display:none;">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading" style="margin-top:36px;">
+      <h3 class="mt-0">Your listings</h3>
+    </div>
+    <div id="my-listings-grid" class="grid-people"></div>
+    <p id="no-listings" class="muted" style="font-size:13px; display:none;">You haven't listed a hostel yet — use the form above to add your first one.</p>
+  </div>
+
+  <script type="module" src="profile.js"></script>
+</body>
+</html>

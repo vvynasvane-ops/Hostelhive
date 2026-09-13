@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Applies saved appearance (font, color, background) before first paint — must stay first, as a classic (non-module) script, to avoid a flash of default styling. -->
+<script src="appearance-core.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>HostelHive</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#080705">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="dark">
+  <div class="bubble-field" aria-hidden="true">
+    <span style="left:8%; width:16px; height:16px; animation-duration:6.5s;"></span>
+    <span style="left:22%; width:10px; height:10px; animation-duration:8s; animation-delay:1s;"></span>
+    <span style="left:71%; width:14px; height:14px; animation-duration:7s; animation-delay:.4s;"></span>
+    <span style="left:88%; width:9px; height:9px; animation-duration:9s; animation-delay:2s;"></span>
+  </div>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">Hostel<em>Hive</em></div>
+      <div class="mode-toggle">
+        <button data-mode-btn="dark">Dark</button>
+        <button data-mode-btn="light">Light</button>
+      </div>
+    </div>
+
+    <div class="auth-wrap">
+      <p class="muted center" style="margin-bottom:28px; font-size:14px;">
+        Every hostel near campus, sorted by price, distance, and what actually matters — no site visits wasted.
+      </p>
+
+      <div class="card">
+        <div class="auth-tabs">
+          <button id="tab-login" class="active" type="button">Log in</button>
+          <button id="tab-signup" type="button">Sign up</button>
+        </div>
+
+        <button id="google-btn" class="btn subtle block" type="button">Continue with Google</button>
+        <div class="divider-or">or use email</div>
+
+        <form id="auth-form">
+          <div id="name-field" style="display:none;">
+            <label for="name">Display name</label>
+            <input id="name" type="text" placeholder="How hostel owners will see you" autocomplete="name">
+          </div>
+
+          <label for="email">Email</label>
+          <input id="email" type="email" required autocomplete="email">
+
+          <label for="password">Password</label>
+          <input id="password" type="password" required autocomplete="current-password" minlength="6">
+
+          <p id="forgot-row" style="text-align:right; margin:8px 0 0;">
+            <a href="#" id="forgot-link" style="font-size:12px;">Forgot password?</a>
+          </p>
+
+          <p id="auth-error" style="color:#d98a71; font-size:13px; min-height:18px; margin-top:12px;"></p>
+
+          <button id="auth-submit" class="btn block" type="submit" style="margin-top:6px;">Log in</button>
+        </form>
+      </div>
+
+      <p class="muted center" style="margin-top:18px; font-size:12px;">
+        By continuing you agree to keep listings honest, and to our
+        <a href="terms.html">Terms</a> &amp; <a href="privacy.html">Privacy Policy</a>.
+      </p>
+      <p class="muted center" style="margin-top:10px; font-size:11px;">
+        <a href="about.html">About</a> · <a href="contact.html">Contact</a>
+      </p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initTheme } from "./theme.js";
+    initTheme();
+  </script>
+  <script type="module" src="auth.js"></script>
+</body>
+</html>

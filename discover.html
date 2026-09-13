@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Applies saved appearance (font, color, background) before first paint — must stay first, as a classic (non-module) script, to avoid a flash of default styling. -->
+<script src="appearance-core.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Browse — HostelHive</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#080705">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="dark">
+  <div class="bubble-field" aria-hidden="true">
+    <span style="left:8%; width:16px; height:16px; animation-duration:6.5s;"></span>
+    <span style="left:22%; width:10px; height:10px; animation-duration:8s; animation-delay:1s;"></span>
+    <span style="left:71%; width:14px; height:14px; animation-duration:7s; animation-delay:.4s;"></span>
+    <span style="left:88%; width:9px; height:9px; animation-duration:9s; animation-delay:2s;"></span>
+  </div>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">Hostel<em>Hive</em></div>
+      <div class="topbar-actions">
+        <div id="notif-mount" class="notif-mount"></div>
+        <button id="logout-btn" class="btn ghost small" type="button">Log out</button>
+      </div>
+    </div>
+    <div id="nav-mount"></div>
+
+    <h1 style="margin-top:32px;">Browse hostels</h1>
+    <p class="muted">Every listing, fully visible — price, distance, and necessities up front, nothing gated behind a code.</p>
+
+    <div class="search-row">
+      <input id="search-input" type="text" placeholder="Search by name, area, or listing code…">
+      <select id="sort-select">
+        <option value="newest">Newest listings</option>
+        <option value="price-asc">Price: low to high</option>
+        <option value="price-desc">Price: high to low</option>
+        <option value="distance">Closest to campus</option>
+      </select>
+      <button id="filters-toggle-btn" class="btn subtle" type="button">Filters</button>
+    </div>
+
+    <div id="filters-panel" class="card" style="display:none; margin-bottom:8px;">
+      <div class="filters-card">
+        <div>
+          <label for="f-price-min">Price from (KES/mo)</label>
+          <input id="f-price-min" type="number" min="0" step="500">
+        </div>
+        <div>
+          <label for="f-price-max">Price to (KES/mo)</label>
+          <input id="f-price-max" type="number" min="0" step="500">
+        </div>
+        <div>
+          <label for="f-distance">Max distance to campus (km)</label>
+          <input id="f-distance" type="number" min="0" step="0.5">
+        </div>
+        <div>
+          <label for="f-area">Area / neighborhood</label>
+          <input id="f-area" type="text" placeholder="Any">
+        </div>
+      </div>
+      <label class="mt-0" style="display:block; margin:12px 0 6px;">Necessities</label>
+      <div id="f-necessities" class="filters-card necessities-check"></div>
+      <label class="consent-row" for="f-has-photo" style="margin-top:12px;">
+        <input type="checkbox" id="f-has-photo">
+        Has photos
+      </label>
+      <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+        <button id="apply-filters" class="btn small">Apply</button>
+        <button id="clear-filters" class="btn ghost small" type="button">Clear</button>
+        <button id="save-preset" class="btn subtle small" type="button">Save as preset…</button>
+      </div>
+      <div id="preset-list" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;"></div>
+    </div>
+
+    <div class="section-heading">
+      <h3 class="mt-0">Saved</h3>
+    </div>
+    <div id="likes-grid" class="grid-people"></div>
+    <p id="no-likes" class="muted" style="font-size:13px; display:none;">Hostels you save show up here. Tap the heart on a listing to save it.</p>
+
+    <div class="section-heading">
+      <h3 class="mt-0">Recommended for you</h3>
+    </div>
+    <div id="recommended-grid" class="grid-people"></div>
+    <p id="no-recommended" class="muted" style="font-size:13px; display:none;">Set your price range, distance, or necessities in Filters to get personal picks here.</p>
+
+    <div class="section-heading">
+      <h3 class="mt-0">All listings</h3>
+    </div>
+    <div id="grid" class="grid-people"></div>
+    <p id="no-results" class="muted" style="display:none;">No hostels match your search yet.</p>
+  </div>
+
+  <div id="detail-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:50; align-items:flex-start; justify-content:center; overflow-y:auto; padding:40px 20px;">
+    <div class="card" style="max-width:760px; width:100%; position:relative;">
+      <button id="close-detail" class="btn ghost small" style="position:absolute; top:18px; right:18px;">Close</button>
+      <div id="detail-body"></div>
+    </div>
+  </div>
+
+  <script type="module" src="discover.js"></script>
+</body>
+</html>

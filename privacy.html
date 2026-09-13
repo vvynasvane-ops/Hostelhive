@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Applies saved appearance (font, color, background) before first paint — must stay first, as a classic (non-module) script, to avoid a flash of default styling. -->
+<script src="appearance-core.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Privacy Policy — HostelHive</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#080705">
+<meta name="description" content="What HostelHive collects, why, and the controls you have over it.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="dark">
+  <div class="bubble-field" aria-hidden="true">
+    <span style="left:8%; width:16px; height:16px; animation-duration:6.5s;"></span>
+    <span style="left:22%; width:10px; height:10px; animation-duration:8s; animation-delay:1s;"></span>
+    <span style="left:71%; width:14px; height:14px; animation-duration:7s; animation-delay:.4s;"></span>
+    <span style="left:88%; width:9px; height:9px; animation-duration:9s; animation-delay:2s;"></span>
+  </div>
+  <div class="shell">
+    <div class="topbar">
+      <a class="brand" href="index.html" data-home-link style="cursor:pointer;">Hostel<em>Hive</em></a>
+      <div class="mode-toggle">
+        <button data-mode-btn="dark">Dark</button>
+        <button data-mode-btn="light">Light</button>
+      </div>
+    </div>
+
+    <div class="legal-wrap">
+      <div class="legal-hero">
+        <div class="legal-glyph">🔐</div>
+        <div class="legal-eyebrow">Your Data, Explained Plainly</div>
+        <h1>Privacy Policy</h1>
+        <p class="legal-tagline">What we collect, why, and the controls you have over it — without the legalese fog.</p>
+      </div>
+
+      <nav class="legal-nav">
+        <a href="index.html" data-home-link data-home-label>← Back home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html" class="active">Privacy</a>
+      </nav>
+
+      <div class="card legal-card">
+        <h2><span class="num">1</span> What we collect</h2>
+        <ul>
+          <li><strong>Account info</strong> — your email (or Google account) via Firebase Authentication.</li>
+          <li><strong>Your account details</strong> — name, photo, and phone/WhatsApp, shown to students you message.</li>
+          <li><strong>Listings you publish</strong> — a hostel's name, location, price, distance, necessities, description, and photos. All of this is public by design — see section 4.</li>
+          <li><strong>Messages</strong> — the conversations you have with other members, so threads can be delivered and displayed.</li>
+          <li><strong>Saved search filters</strong> — the price range, distance, and necessities you set on Browse, used to power Recommended and match notifications.</li>
+          <li><strong>Activity</strong> — a "last active" timestamp shown as "active recently" to whoever you're chatting with, only if you've enabled it.</li>
+          <li><strong>Reports &amp; feedback</strong> — anything you report, or quick feedback you leave on a listing, so our team can review reports and other students can see feedback.</li>
+          <li><strong>Notifications</strong> — a device token, only if you opt into browser push notifications.</li>
+        </ul>
+
+        <h2><span class="num">2</span> What we don't collect</h2>
+        <ul>
+          <li>No GPS or precise location tracking — distance and area are only what you type in yourself.</li>
+          <li>No third-party ad trackers, and we don't sell your data to anyone.</li>
+          <li>We don't scan your messages to build an advertising profile of you.</li>
+        </ul>
+
+        <h2><span class="num">3</span> How it's used</h2>
+        <p>
+          Your saved filters power Browse's Recommended section and match notifications — weighing price,
+          distance, area, and necessities to surface listings worth a look. Messages and notifications exist
+          to run the chat itself. Reports and feedback are used to keep listings honest and help other
+          students decide. Your theme and accent-color choices are saved only in your own browser's local
+          storage, never on our servers.
+        </p>
+
+        <h2><span class="num">4</span> Nothing about a listing is hidden</h2>
+        <p>
+          Earlier versions of apps like this one sometimes lock extra details behind a private code. HostelHive
+          deliberately does the opposite: price, exact location, necessities, contact info, and every photo on
+          a listing are visible to any signed-in student, immediately, with no unlock step — because all of
+          that is exactly what you need to decide quickly, not something worth gating.
+        </p>
+
+        <h2><span class="num">5</span> Who can see what</h2>
+        <ul>
+          <li>Every published listing — and its full details — is visible to any signed-in student.</li>
+          <li>Feedback left on a listing is visible to anyone viewing it, not just the owner.</li>
+          <li>Members you block can no longer show you their listings or message you.</li>
+          <li>"Active recently" status is visible to others only if you've turned that setting on.</li>
+          <li>Messages in a thread are visible only to the two people in it. They're transmitted over an
+            encrypted connection and stored in our database — this isn't end-to-end encrypted, so please
+            avoid sending anything you wouldn't want stored.</li>
+        </ul>
+
+        <h2><span class="num">6</span> Where it's stored</h2>
+        <p>
+          HostelHive runs on Firebase (Google Cloud) infrastructure. Data is encrypted in transit (HTTPS)
+          and at rest using Firebase's own storage encryption.
+        </p>
+
+        <h2><span class="num">7</span> Your controls</h2>
+        <ul>
+          <li>Edit or delete any listing you've published, any time, from My Listings.</li>
+          <li>Toggle whether "active recently" is visible to others.</li>
+          <li>Block or report a member or listing directly from its detail view.</li>
+          <li>Delete your account entirely, any time, from Settings → Danger zone — this removes your
+            profile and every listing you've published immediately (see the Danger zone for exactly what
+            stays behind: past conversations remain with whoever you messaged, the same way deleting your
+            number doesn't erase a friend's texts).</li>
+        </ul>
+
+        <h2><span class="num">8</span> Notifications</h2>
+        <p>
+          If you enable browser push notifications, we use them to alert you to new messages and new listings
+          that match your saved search. You can revoke this permission at any time through your browser's
+          site settings.
+        </p>
+
+        <h2><span class="num">9</span> Changes to this policy</h2>
+        <p>
+          If this policy changes in a meaningful way, we'll update the date below. Continuing to use
+          HostelHive afterward means you accept the update.
+        </p>
+
+        <h2><span class="num">10</span> Contact</h2>
+        <p>Questions about your data? Reach us at <a href="mailto:artyourtaste@gmail.com">artyourtaste@gmail.com</a>, or visit our <a href="contact.html">contact page</a>.</p>
+      </div>
+
+      <p class="legal-updated">Last updated September 2026</p>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initTheme } from "./theme.js";
+    import { initLegalNav } from "./legal-nav.js";
+    initTheme();
+    initLegalNav();
+  </script>
+</body>
+</html>

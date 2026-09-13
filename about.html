@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Applies saved appearance (font, color, background) before first paint — must stay first, as a classic (non-module) script, to avoid a flash of default styling. -->
+<script src="appearance-core.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>About — HostelHive</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#080705">
+<meta name="description" content="HostelHive helps students find, compare, and list student hostels near campus — every listing fully visible, sorted by price, distance, and necessities.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="dark">
+  <div class="bubble-field" aria-hidden="true">
+    <span style="left:8%; width:16px; height:16px; animation-duration:6.5s;"></span>
+    <span style="left:22%; width:10px; height:10px; animation-duration:8s; animation-delay:1s;"></span>
+    <span style="left:71%; width:14px; height:14px; animation-duration:7s; animation-delay:.4s;"></span>
+    <span style="left:88%; width:9px; height:9px; animation-duration:9s; animation-delay:2s;"></span>
+  </div>
+  <div class="shell">
+    <div class="topbar">
+      <a class="brand" href="index.html" data-home-link style="cursor:pointer;">Hostel<em>Hive</em></a>
+      <div class="mode-toggle">
+        <button data-mode-btn="dark">Dark</button>
+        <button data-mode-btn="light">Light</button>
+      </div>
+    </div>
+
+    <div class="legal-wrap">
+      <div class="legal-hero">
+        <div class="legal-glyph">⬡</div>
+        <div class="legal-eyebrow">Our Story</div>
+        <h1>About HostelHive</h1>
+        <p class="legal-tagline">Every hostel near campus, sorted by price, distance, and what actually matters — no site visits wasted.</p>
+      </div>
+
+      <nav class="legal-nav">
+        <a href="index.html" data-home-link data-home-label>← Back home</a>
+        <a href="about.html" class="active">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+
+      <div class="card legal-card">
+        <h2><span class="num">⬡</span> Why we built this</h2>
+        <p>
+          Finding student housing usually means a dozen WhatsApp groups, half-answered DMs, and a walking tour of
+          places that turn out to be nothing like the photo. HostelHive puts every listing in one place instead —
+          price, distance to campus, and the necessities that actually decide whether a room works for you, all
+          visible up front. Nothing about a hostel is locked behind a code or a "message to unlock" gate.
+        </p>
+
+        <h2><span class="num">⬡</span> How it works</h2>
+        <p>
+          Browse filters by price range, distance, and necessities like WiFi, water, security, or meals — set them
+          once and Recommended keeps surfacing new listings that fit, with a notification the moment one goes up.
+          Save the ones worth a second look, message the owner directly to ask questions or arrange a viewing, and
+          leave quick feedback afterward so the next student searching knows what you found.
+        </p>
+
+        <div class="about-values">
+          <div class="about-value-card">
+            <span class="glyph">◎</span>
+            <h3>Nothing hidden</h3>
+            <p>Price, location, necessities, and photos are public on every listing — no unlock codes, no gated details standing between you and a decision.</p>
+          </div>
+          <div class="about-value-card">
+            <span class="glyph">🛰</span>
+            <h3>Verified &amp; vigilant</h3>
+            <p>Block and Report are one tap away on every listing, and a real person reads every report that comes in.</p>
+          </div>
+          <div class="about-value-card">
+            <span class="glyph">⚡</span>
+            <h3>Fast by design</h3>
+            <p>Filter, compare, and message an owner in minutes — built for a student who needs a room sorted, not another app to browse endlessly.</p>
+          </div>
+          <div class="about-value-card">
+            <span class="glyph">⬡</span>
+            <h3>Owned by the lister</h3>
+            <p>Anyone can list a hostel they manage, edit it any time, and see exactly how many students have viewed it.</p>
+          </div>
+        </div>
+
+        <h2><span class="num">⬡</span> Who's behind it</h2>
+        <p>
+          HostelHive is built and looked after by a small, independent team — the kind that reads its own
+          support inbox. If a listing looks off, something breaks, or it could simply work better for students,
+          we want to hear about it.
+        </p>
+        <a href="contact.html" class="btn subtle block" style="margin-top:6px;">Get in touch</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initTheme } from "./theme.js";
+    import { initLegalNav } from "./legal-nav.js";
+    initTheme();
+    initLegalNav();
+  </script>
+</body>
+</html>

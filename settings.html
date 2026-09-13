@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Applies saved appearance (font, color, background) before first paint — must stay first, as a classic (non-module) script, to avoid a flash of default styling. -->
+<script src="appearance-core.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Theme — HostelHive</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#080705">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="dark">
+  <div class="bubble-field" aria-hidden="true">
+    <span style="left:8%; width:16px; height:16px; animation-duration:6.5s;"></span>
+    <span style="left:22%; width:10px; height:10px; animation-duration:8s; animation-delay:1s;"></span>
+    <span style="left:71%; width:14px; height:14px; animation-duration:7s; animation-delay:.4s;"></span>
+    <span style="left:88%; width:9px; height:9px; animation-duration:9s; animation-delay:2s;"></span>
+  </div>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">Hostel<em>Hive</em></div>
+      <div class="topbar-actions">
+        <div id="notif-mount" class="notif-mount"></div>
+        <button id="logout-btn" class="btn ghost small" type="button">Log out</button>
+      </div>
+    </div>
+    <div id="nav-mount"></div>
+
+    <h1 style="margin-top:32px;">Theme</h1>
+    <p class="muted">HostelHive ships in gold &amp; black. Nudge the accent to make it yours.</p>
+
+    <div class="card" style="max-width:480px; margin-top:20px;">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div id="rgb-swatch" class="swatch"></div>
+        <div>
+          <div style="font-family:var(--font-display); font-size:16px;">Accent color</div>
+          <div class="muted" style="font-size:12px;">Drag to retune the gold.</div>
+        </div>
+      </div>
+
+      <label>Red</label>
+      <div class="rgb-row"><input id="rgb-r" type="range" min="0" max="255" value="212"><span id="rgb-r-val">212</span></div>
+      <label>Green</label>
+      <div class="rgb-row"><input id="rgb-g" type="range" min="0" max="255" value="175"><span id="rgb-g-val">175</span></div>
+      <label>Blue</label>
+      <div class="rgb-row"><input id="rgb-b" type="range" min="0" max="255" value="55"><span id="rgb-b-val">55</span></div>
+
+      <div class="gilt-rule"></div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div>
+          <div style="font-family:var(--font-display); font-size:16px;">Mode</div>
+          <div class="muted" style="font-size:12px;">Applies instantly across the app.</div>
+        </div>
+        <div class="mode-toggle">
+          <button data-mode-btn="dark">Dark</button>
+          <button data-mode-btn="light">Light</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="max-width:480px; margin-top:18px;">
+      <h3 class="mt-0">Appearance</h3>
+      <p class="muted" style="font-size:12px; margin-top:-4px;">Tune how HostelHive reads and feels on your device — saved here only, not shared with anyone else.</p>
+
+      <label>Font</label>
+      <select id="appearance-font-family" class="field">
+        <option value="rajdhani">Rajdhani (default)</option>
+        <option value="poppins">Poppins — clean &amp; modern</option>
+        <option value="playfair">Playfair Display — elegant serif</option>
+        <option value="quicksand">Quicksand — soft &amp; friendly</option>
+        <option value="nunito">Nunito — warm &amp; rounded</option>
+        <option value="dancing">Dancing Script — flowing cursive</option>
+        <option value="merriweather">Merriweather — classic reading serif</option>
+        <option value="spacegrotesk">Space Grotesk — sleek &amp; techy</option>
+      </select>
+
+      <label>Text size</label>
+      <div class="rgb-row"><input id="appearance-font-size" type="range" min="13" max="22" step="1"><span id="appearance-font-size-val">16px</span></div>
+      <label>Text weight</label>
+      <div class="rgb-row"><input id="appearance-font-weight" type="range" min="400" max="700" step="100"><span id="appearance-font-weight-val">400</span></div>
+      <label>Letter spacing</label>
+      <div class="rgb-row"><input id="appearance-letter-spacing" type="range" min="-1" max="3" step="0.5"><span id="appearance-letter-spacing-val">0px</span></div>
+      <label>Line height</label>
+      <div class="rgb-row"><input id="appearance-line-height" type="range" min="1.3" max="1.9" step="0.1"><span id="appearance-line-height-val">1.5</span></div>
+
+      <div class="gilt-rule"></div>
+
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div id="font-color-swatch" class="swatch"></div>
+        <div>
+          <div style="font-family:var(--font-display); font-size:16px;">Font color</div>
+          <div class="muted" style="font-size:12px;">Drag to mix your own, in the same Red/Green/Blue style as the accent color above.</div>
+        </div>
+      </div>
+      <label>Red</label>
+      <div class="rgb-row"><input id="font-color-r" type="range" min="0" max="255"><span id="font-color-r-val">245</span></div>
+      <label>Green</label>
+      <div class="rgb-row"><input id="font-color-g" type="range" min="0" max="255"><span id="font-color-g-val">241</span></div>
+      <label>Blue</label>
+      <div class="rgb-row"><input id="font-color-b" type="range" min="0" max="255"><span id="font-color-b-val">230</span></div>
+      <button type="button" id="font-color-default-btn" class="btn ghost small" style="margin-top:10px;">Use theme default</button>
+
+      <div class="gilt-rule"></div>
+
+      <label>Background</label>
+      <div class="bg-preset-row">
+        <button type="button" class="bg-swatch bg-swatch-none" data-bg-preset="none" title="None (default)"></button>
+        <button type="button" class="bg-swatch bg-swatch-aurora" data-bg-preset="aurora" title="Aurora Deep"></button>
+        <button type="button" class="bg-swatch bg-swatch-rose" data-bg-preset="rose" title="Rosé Dusk"></button>
+        <button type="button" class="bg-swatch bg-swatch-bloom" data-bg-preset="bloom" title="Midnight Bloom"></button>
+        <label class="bg-swatch bg-swatch-custom" id="bg-custom-swatch" title="Upload your own photo">
+          <span id="bg-custom-thumb-icon">+</span>
+          <input type="file" id="appearance-bg-upload" accept="image/*" hidden>
+        </label>
+      </div>
+      <p class="field-hint" id="bg-custom-hint">Tap + to use a photo from your device. Stored on this device only.</p>
+
+      <div class="gilt-rule"></div>
+
+      <label>Background blur <span class="field-hint" style="display:inline;">— blurs the whole background, like a soft-focus photo</span></label>
+      <div class="rgb-row"><input id="appearance-blur" type="range" min="0" max="24" step="2"><span id="appearance-blur-val">10px</span></div>
+
+      <button type="button" id="appearance-reset-btn" class="btn ghost small block" style="margin-top:16px;">Reset appearance to defaults</button>
+    </div>
+
+    <div class="card" style="max-width:480px; margin-top:18px;">
+      <h3 class="mt-0">Password &amp; security</h3>
+      <div id="pw-google-note" style="display:none;">
+        <p class="muted" style="font-size:13px;">You signed in with Google, so there's no HostelHive password to change — manage it from your Google Account instead.</p>
+      </div>
+      <div id="pw-email-form">
+        <label>Current password</label>
+        <input id="pw-current" type="password" autocomplete="current-password" placeholder="Current password">
+        <label>New password</label>
+        <input id="pw-new" type="password" autocomplete="new-password" placeholder="At least 6 characters">
+        <label>Confirm new password</label>
+        <input id="pw-confirm" type="password" autocomplete="new-password" placeholder="Retype new password">
+        <p class="field-hint" id="pw-error" style="display:none; color:#ff9ab3;"></p>
+        <button type="button" id="pw-update-btn" class="btn small block" style="margin-top:10px;">Update password</button>
+        <button type="button" id="pw-forgot-btn" class="btn ghost small block" style="margin-top:8px;">Email me a reset link instead</button>
+      </div>
+    </div>
+
+    <div class="card" style="max-width:480px; margin-top:18px;">
+      <h3 class="mt-0">Help &amp; safety</h3>
+      <p class="muted" style="font-size:13px;">
+        View a hostel in person (or on a video call) before paying anything — never send a deposit to secure a room
+        sight unseen. Keep early conversations with owners on HostelHive, and confirm the exact room and price in
+        writing before you move in. If a listing looks fake or an owner makes you uncomfortable, Block or Report it.
+      </p>
+      <a href="mailto:artyourtaste@gmail.com" class="btn subtle block" style="margin-top:6px;">Contact support</a>
+      <p class="field-hint center" style="margin-top:8px;">artyourtaste@gmail.com</p>
+    </div>
+
+    <div class="card danger-zone" style="max-width:480px; margin-top:18px;">
+      <h3 class="mt-0">Danger zone</h3>
+      <p class="muted" style="font-size:13px;">
+        Deleting your account removes your profile and every hostel you've listed for good — they vanish from
+        Browse, search, recommendations, and everyone's Saved list right away, as if you'd never joined. Your
+        sign-in is deleted too, so there's no way back into this account. This can't be undone.
+      </p>
+
+      <div id="delete-google-note" style="display:none; margin-top:10px;">
+        <button type="button" id="delete-google-reauth-btn" class="btn subtle block">Confirm it's you with Google</button>
+        <p class="field-hint" id="delete-google-status"></p>
+      </div>
+
+      <div id="delete-email-form" style="display:none;">
+        <label>Current password</label>
+        <input id="delete-password" type="password" autocomplete="current-password" placeholder="Confirm your password">
+      </div>
+
+      <label>Type DELETE to confirm</label>
+      <input id="delete-confirm-text" type="text" autocomplete="off" placeholder="DELETE">
+
+      <p class="field-hint" id="delete-error" style="display:none; color:#ff9ab3;"></p>
+      <button type="button" id="delete-account-btn" class="btn danger block" style="margin-top:12px;" disabled>Delete my account</button>
+    </div>
+
+    <p class="muted center" style="margin:22px 0 8px; font-size:12px;">
+      <a href="about.html">About</a> · <a href="contact.html">Contact</a> · <a href="terms.html">Terms</a> · <a href="privacy.html">Privacy</a>
+    </p>
+  </div>
+
+  <script type="module">
+    import {
+      requireAuth, auth, signOut, db, doc, getDoc, deleteDoc, sendPasswordResetEmail,
+      updatePassword, reauthenticateWithCredential, reauthenticateWithPopup, EmailAuthProvider,
+      deleteUser, googleProvider, collection, getDocs, query, where
+    } from "./firebase-init.js";
+    import { initTheme } from "./theme.js";
+    import { renderNav } from "./nav.js";
+    import { startPresence } from "./presence.js";
+    import { initNotifications, showToast } from "./notifications.js";
+    import { loaderTrackHtml, addPasswordToggle } from "./common.js";
+    initTheme();
+    renderNav("settings");
+    document.body.insertAdjacentHTML("beforeend", loaderTrackHtml("Loading Theme"));
+    requireAuth().then(async user => {
+      startPresence(user.uid);
+      const snap = await getDoc(doc(db, "users", user.uid));
+      initNotifications(user.uid, (snap.data() || {}).preferences);
+      document.querySelector(".loader-page")?.remove();
+
+      // Password change only makes sense for email/password accounts —
+      // a Google-only sign-in has no HostelHive password to update.
+      const hasPasswordProvider = user.providerData.some(p => p.providerId === "password");
+      document.querySelector("#pw-google-note").style.display = hasPasswordProvider ? "none" : "block";
+      document.querySelector("#pw-email-form").style.display = hasPasswordProvider ? "block" : "none";
+      document.querySelector("#delete-google-note").style.display = hasPasswordProvider ? "none" : "block";
+      document.querySelector("#delete-email-form").style.display = hasPasswordProvider ? "block" : "none";
+    }).catch(err => {
+      console.error("Settings load failed:", err);
+      document.querySelector(".loader-page")?.remove();
+    });
+    document.querySelector("#logout-btn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "index.html";
+    });
+    ["r","g","b"].forEach(c => {
+      const input = document.querySelector(`#rgb-${c}`);
+      const label = document.querySelector(`#rgb-${c}-val`);
+      input.addEventListener("input", () => (label.textContent = input.value));
+    });
+
+    // ---- Password & security ----
+    ["#pw-current", "#pw-new", "#pw-confirm"].forEach(sel => addPasswordToggle(document.querySelector(sel)));
+    const pwError = document.querySelector("#pw-error");
+    const showPwError = msg => { pwError.textContent = msg; pwError.style.display = "block"; };
+    document.querySelector("#pw-update-btn").addEventListener("click", async () => {
+      pwError.style.display = "none";
+      const current = document.querySelector("#pw-current").value;
+      const next = document.querySelector("#pw-new").value;
+      const confirm = document.querySelector("#pw-confirm").value;
+      if (!current) return showPwError("Enter your current password.");
+      if (next.length < 6) return showPwError("New password needs to be at least 6 characters.");
+      if (next !== confirm) return showPwError("New passwords don't match.");
+      const btn = document.querySelector("#pw-update-btn");
+      btn.disabled = true; btn.textContent = "Updating…";
+      try {
+        // Firebase requires a recent sign-in for sensitive changes like this —
+        // re-authenticating with the current password satisfies that even if
+        // the session has been open a while.
+        const cred = EmailAuthProvider.credential(auth.currentUser.email, current);
+        await reauthenticateWithCredential(auth.currentUser, cred);
+        await updatePassword(auth.currentUser, next);
+        document.querySelector("#pw-current").value = "";
+        document.querySelector("#pw-new").value = "";
+        document.querySelector("#pw-confirm").value = "";
+        showToast("Password updated.", { type: "success" });
+      } catch (err) {
+        console.error("Password update failed:", err);
+        const code = err.code || "";
+        if (code.includes("wrong-password") || code.includes("invalid-credential")) showPwError("Current password is incorrect.");
+        else if (code.includes("too-many-requests")) showPwError("Too many attempts — try again in a bit.");
+        else showPwError("Couldn't update your password — try again.");
+      } finally {
+        btn.disabled = false; btn.textContent = "Update password";
+      }
+    });
+    document.querySelector("#pw-forgot-btn").addEventListener("click", async () => {
+      try {
+        await sendPasswordResetEmail(auth, auth.currentUser.email);
+        showToast(`Reset link sent to ${auth.currentUser.email}`, { type: "success" });
+      } catch (err) {
+        console.error("Reset email failed:", err);
+        showToast("Couldn't send the reset email — try again.", { type: "error" });
+      }
+    });
+
+    // ---- Danger zone: delete account ----
+    // Two independent gates have to clear before the button even enables:
+    // typing DELETE (catches an accidental tap) and proving it's really the
+    // account owner right now (a current password, or a fresh Google
+    // confirmation) — Firebase requires that "recent login" anyway before
+    // it will let deleteUser() through, so this satisfies both at once.
+    addPasswordToggle(document.querySelector("#delete-password"));
+    const deleteConfirmText = document.querySelector("#delete-confirm-text");
+    const deletePasswordInput = document.querySelector("#delete-password");
+    const deleteBtn = document.querySelector("#delete-account-btn");
+    const deleteError = document.querySelector("#delete-error");
+    const deleteGoogleBtn = document.querySelector("#delete-google-reauth-btn");
+    const deleteGoogleStatus = document.querySelector("#delete-google-status");
+    const showDeleteError = msg => { deleteError.textContent = msg; deleteError.style.display = "block"; };
+
+    let googleReauthed = false; // set once #delete-google-reauth-btn succeeds this page load
+    function refreshDeleteButton() {
+      const typedDelete = deleteConfirmText.value.trim().toUpperCase() === "DELETE";
+      const identityConfirmed = document.querySelector("#delete-email-form").style.display !== "none"
+        ? !!deletePasswordInput.value
+        : googleReauthed;
+      deleteBtn.disabled = !(typedDelete && identityConfirmed);
+    }
+    deleteConfirmText.addEventListener("input", refreshDeleteButton);
+    deletePasswordInput.addEventListener("input", refreshDeleteButton);
+
+    deleteGoogleBtn.addEventListener("click", async () => {
+      deleteGoogleBtn.disabled = true;
+      try {
+        await reauthenticateWithPopup(auth.currentUser, googleProvider);
+        googleReauthed = true;
+        deleteGoogleStatus.textContent = "Confirmed ✓";
+        deleteGoogleStatus.style.color = "";
+      } catch (err) {
+        console.error("Google reauth failed:", err);
+        deleteGoogleStatus.textContent = "Couldn't confirm with Google — try again.";
+        deleteGoogleStatus.style.color = "#ff9ab3";
+      } finally {
+        deleteGoogleBtn.disabled = false;
+        refreshDeleteButton();
+      }
+    });
+
+    deleteBtn.addEventListener("click", async () => {
+      deleteError.style.display = "none";
+      const sure = confirm("This is permanent. Your profile and every hostel you've listed disappear for everyone — right now. Delete your account?");
+      if (!sure) return;
+      deleteBtn.disabled = true;
+      deleteBtn.textContent = "Deleting…";
+      const uid = auth.currentUser.uid;
+      try {
+        // Re-prove identity right before the irreversible step, even though
+        // the button already required it — the password/Google confirmation
+        // above could be stale by now (long pause, session quirks), and
+        // Firebase would reject deleteUser() on a stale one anyway.
+        if (document.querySelector("#delete-email-form").style.display !== "none") {
+          const cred = EmailAuthProvider.credential(auth.currentUser.email, deletePasswordInput.value);
+          await reauthenticateWithCredential(auth.currentUser, cred);
+        } else {
+          await reauthenticateWithPopup(auth.currentUser, googleProvider);
+        }
+
+        // Delete every hostel this student owns FIRST, while still signed
+        // in — Firestore rules only let the owner delete their own listing,
+        // so this has to happen before the account (or its Firestore doc)
+        // goes away. Same live-join logic as the profile deletion below:
+        // once these docs are gone, Browse, search, and everyone's Saved
+        // list stop showing them automatically, with nothing else to touch.
+        const ownListings = await getDocs(query(collection(db, "hostels"), where("ownerUid", "==", uid)));
+        await Promise.all(ownListings.docs.map(d => deleteDoc(doc(db, "hostels", d.id))));
+
+        // Delete the Firestore profile next, still while signed in (deleting
+        // it requires request.auth != null in the rules). Everyone else's
+        // Browse grid, recommendations, and Saved list are all built live
+        // from the `users` collection — the instant this doc is gone, this
+        // student vanishes from all of them everywhere. Old conversations
+        // stay in Firestore for whoever they messaged (deleting those would
+        // erase the *other* person's history without their consent), but
+        // messages.js now shows "Deleted account" instead of a live profile
+        // the moment this doc disappears.
+        await deleteDoc(doc(db, "users", uid));
+
+        // Delete the sign-in itself last, and only after the profile is
+        // gone — this is what makes the deletion permanent instead of
+        // just "profile currently missing." Doing it in this order also
+        // means if this step fails, the account is left in the same
+        // self-healing state the app already handles: profile.js quietly
+        // rebuilds a blank profile doc on next login rather than crashing.
+        await deleteUser(auth.currentUser);
+
+        // Best-effort local cleanup — nothing here holds anyone's data
+        // hostage if it fails, it just tidies up this device.
+        try {
+          localStorage.removeItem(`lw-presets-${uid}`);
+          localStorage.removeItem(`lw-notifications-${uid}`);
+          Object.keys(localStorage).forEach(k => { if (k.startsWith(`lw-lock:`) && k.endsWith(`:${uid}`)) localStorage.removeItem(k); });
+        } catch { /* storage unavailable — nothing to clean up */ }
+
+        window.location.href = "index.html?deleted=1";
+      } catch (err) {
+        console.error("Account deletion failed:", err);
+        const code = err.code || "";
+        if (code.includes("wrong-password") || code.includes("invalid-credential")) showDeleteError("That password isn't right.");
+        else if (code.includes("popup-closed") || code.includes("cancelled")) showDeleteError("Google confirmation was cancelled.");
+        else if (code.includes("requires-recent-login")) showDeleteError("Please confirm your identity again, then retry.");
+        else showDeleteError("Couldn't delete your account — check your connection and try again.");
+        deleteBtn.disabled = false;
+        deleteBtn.textContent = "Delete my account";
+      }
+    });
+  </script>
+</body>
+</html>

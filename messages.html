@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Applies saved appearance (font, color, background) before first paint — must stay first, as a classic (non-module) script, to avoid a flash of default styling. -->
+<script src="appearance-core.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Messages — HostelHive</title>
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#080705">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="dark">
+
+  <div class="bubble-field" aria-hidden="true">
+    <span style="left:8%; width:16px; height:16px; animation-duration:6.5s;"></span>
+    <span style="left:22%; width:10px; height:10px; animation-duration:8s; animation-delay:1s;"></span>
+    <span style="left:71%; width:14px; height:14px; animation-duration:7s; animation-delay:.4s;"></span>
+    <span style="left:88%; width:9px; height:9px; animation-duration:9s; animation-delay:2s;"></span>
+  </div>
+
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">Hostel<em>Hive</em></div>
+      <div class="topbar-actions">
+        <div id="notif-mount" class="notif-mount"></div>
+        <button id="logout-btn" class="btn ghost small" type="button">Log out</button>
+      </div>
+    </div>
+    <div id="nav-mount"></div>
+
+    <h1 style="margin-top:32px;">Messages</h1>
+    <p class="muted">Every conversation you've started, in one place.</p>
+
+    <div class="messages-shell">
+      <div id="inbox-panel" class="inbox-panel">
+        <div class="inbox-search">
+          <input id="inbox-search-input" type="text" placeholder="Search conversations…">
+          <div class="inbox-filters">
+            <button type="button" class="inbox-filter-tab active" data-filter="all">All</button>
+            <button type="button" class="inbox-filter-tab" data-filter="new">
+              New responders<span id="new-count-badge" class="filter-count" style="display:none;"></span>
+            </button>
+          </div>
+        </div>
+        <div id="convo-list"></div>
+        <p id="no-convos" class="muted" style="display:none; padding:18px; font-size:13px;">
+          No conversations yet — head to <a href="discover.html">Browse</a> and message a hostel owner.
+        </p>
+        <p id="no-new-convos" class="muted" style="display:none; padding:18px; font-size:13px;">
+          No new responders right now — anyone who texts you back or reaches out first will show up here.
+        </p>
+      </div>
+
+      <div id="chat-panel-wrap" class="chat-panel-wrap">
+        <div id="chat-placeholder" class="chat-placeholder">
+          <span class="lock-icon">&#10084;</span>
+          Pick a conversation to see it here.
+        </div>
+        <div id="chat-mount" style="width:100%; display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="messages.js"></script>
+</body>
+</html>
