@@ -142,7 +142,7 @@ indexes automatically.
   every page via `theme.js`. A gold hive-hexagon-with-house favicon
   (`gen_icons.py` — regenerate after tweaking the design).
 
-## 4. Running it
+## 4. Running it locally
 Any static file server works, e.g.:
 ```
 npx serve .
@@ -150,7 +150,42 @@ npx serve .
 Firebase Auth requires the page be served over `http://localhost` or
 `https://`, not opened as a bare `file://` path.
 
-## 5. Notifications
+## 5. Deploying to Firebase Hosting
+This project ships a `firebase.json` and `.firebaserc` so `firebase deploy`
+works out of the box — **with no SPA rewrite**, on purpose. This app is a
+plain multi-page site (`index.html`, `discover.html`, `profile.html`, …),
+not a client-routed single-page app, so it must **not** have a catch-all
+rewrite like:
+```json
+"rewrites": [{ "source": "**", "destination": "/index.html" }]
+```
+That rule is the default `firebase init hosting` adds when you answer "yes"
+to "configure as a single-page app," and it's a common source of a
+confusing bug: any missing or mistyped static asset — say,
+`firebase-config.js` — stops 404ing and instead gets served `index.html`'s
+content with a 200 status. The browser then tries to parse that HTML as
+JavaScript and throws `Uncaught SyntaxError: Unexpected token '<'` on line
+1, which looks like a broken file even though the file itself is fine. If
+you ever regenerate `firebase.json` yourself (e.g. via `firebase init`),
+say **no** to the single-page-app prompt, or just remove any `rewrites`
+key it adds afterward.
+
+To deploy:
+```
+npm install -g firebase-tools   # once
+firebase login                  # once
+```
+Then edit `.firebaserc` to point `"default"` at your actual Firebase
+project ID (it ships with the placeholder `"hostelhive"`), and run:
+```
+firebase deploy --only hosting
+```
+`firebase.json` also points `firestore.rules` and `firestore.indexes.json`
+at the right files, so `firebase deploy --only firestore` (rules +
+indexes together) works too, without needing `firebase init` to set that
+part up separately.
+
+## 6. Notifications
 - **Save confirmations**: every save action across the app (account,
   listings, filter presets, saves, blocks, reports, feedback, theme
   changes) raises a themed, stacked toast (`notifications.js`).
@@ -170,7 +205,7 @@ Firebase Auth requires the page be served over `http://localhost` or
   background push would need a service worker + FCM and a small backend;
   out of scope for this static-file setup for now.
 
-## 6. App icon
+## 7. App icon
 Generated procedurally with Pillow (`gen_icons.py`, shipped in the project
 root — rerun it any time you want to tweak the design and regenerate every
 size): a gold hive hexagon with a black house silhouette cut into it, on a
@@ -181,8 +216,8 @@ PNGs, two maskable PWA icons (192/512, glyph inset to the safe zone), a
 `purpose` per icon (`any` vs `maskable`), and every page's `<head>` links
 the favicon set and `apple-touch-icon.png` directly.
 
-## 7. Still worth adding later
-- No *background* push (see section 5).
+## 8. Still worth adding later
+- No *background* push (see section 6).
 - No native iOS/Android app — the manifest makes it installable as a PWA.
 - The Browse feed loads every hostel in one query; once listing count
   grows you'll want to paginate or add a geo-aware query.
@@ -215,3 +250,8 @@ the memory/skills-style file layout) but the product itself is different:
 - Color theme moved from a violet/cyan "deep space" look to gold & black.
 - `firebase-config.js` was reset to placeholders — this needs its own
   Firebase project, not the original app's.
+- Added `firebase.json` and `.firebaserc` (missing from the original
+  handoff) so `firebase deploy` works correctly for a multi-page static
+  site — deliberately with no single-page-app rewrite, which is what
+  caused the `firebase-config.js` "Unexpected token '<'" error if you hit
+  that before this file existed.
