@@ -1,20 +1,23 @@
-// ============================================================
-// Your Firebase project config (Firebase console -> Project settings
-// -> General -> Your apps -> Web app). firebase-init.js imports the
-// SDK itself, so this file only needs to export the plain config object.
-//
-// IMPORTANT: this is a NEW app with its own data model (hostels, not
-// dating profiles) — do not point it at the existing love-wonders
-// Firebase project, or the two apps' users/collections will mix.
-// Create a separate Firebase project (e.g. "hostelhive") and paste
-// its config below before deploying.
-// ============================================================
-export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "hostelhive.firebaseapp.com",
-  projectId: "hostelhive",
-  storageBucket: "hostelhive.firebasestorage.app",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
-  measurementId: "YOUR_MEASUREMENT_ID"
-};
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAAbPeB29qZx4H9A5RJJfnBrkMGXJLZBTA",
+    authDomain: "hostelhive-18795.firebaseapp.com",
+    projectId: "hostelhive-18795",
+    storageBucket: "hostelhive-18795.firebasestorage.app",
+    messagingSenderId: "984507880388",
+    appId: "1:984507880388:web:e6afddf66f8ef679844a91",
+    measurementId: "G-HPWJ9XEECD"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
