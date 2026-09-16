@@ -70,6 +70,18 @@
 
 *{ box-sizing: border-box; }
 html,body{ margin:0; padding:0; }
+/* Android Chrome auto-inflates text size ("font boosting"/text autosizer)
+   on narrow viewports to make small text more readable — it estimates
+   readability per text block rather than respecting the author's px
+   sizes, and headings/paragraphs sitting in a full-width column like
+   ours are exactly what it targets. Left unset, this is what makes h1
+   ("BROWSE HOSTELS") and the muted tagline balloon to several times
+   their declared size on a phone, bleed up underneath the sticky topbar
+   (giving the ghosted double-text look), and shove the real page body
+   (search bar, grid, listings) far below the visible viewport. Turning
+   the adjuster off makes every page render at its authored size on
+   Android exactly as it does on desktop. */
+html{ -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 body{
   background: var(--bg);
   color: var(--user-font-color);
