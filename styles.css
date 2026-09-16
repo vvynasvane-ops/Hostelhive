@@ -40,7 +40,6 @@
   --radius-lg: 26px;
   --radius-sm: 12px;
   --radius-pill: 999px;
-  --nav-h: 66px;
 
   /* ---- user-adjustable appearance (Settings → Appearance), read live by
      appearance.js and applied on every page ---- */
@@ -369,7 +368,12 @@ a{ color: var(--accent); text-decoration: none; }
 
 /* ---- top bar ---- */
 .topbar{
-  display:flex; align-items:center; justify-content:space-between;
+  /* justify-content is deliberately NOT space-between: with the hamburger
+     toggle as a third child on small screens (before .brand), that would
+     center the brand instead of keeping it right after the toggle. The
+     `.brand ~ *` rule below already pins .topbar-actions to the far right
+     via margin-left:auto, which is all the "space between" this needs. */
+  display:flex; align-items:center; justify-content:flex-start;
   gap: 14px;
   padding: 20px 0;
   border-bottom: 1px solid var(--line);
@@ -980,18 +984,31 @@ textarea{ resize: vertical; min-height: 90px; }
 .notif-item-time{ font-size:11px; color: var(--text-muted); }
 .notif-empty{ padding: 24px 16px; text-align:center; font-size:13px; color: var(--text-muted); margin:0; }
 
-/* ---- shared app nav (renders via nav.js into #nav-mount) ---- */
-#nav-mount{
+/* ---- shared app nav (renders via nav.js into #nav-mount) ----
+   #nav-mount is a pure wrapper now — nav.js fills it with two
+   *alternative* navs plus the off-canvas machinery, and CSS picks
+   which nav is actually visible at a given width:
+     - .appnav          → sticky horizontal nav under the topbar,
+                           shown above 720px (unchanged from before).
+     - .nav-toggle       → hamburger button, injected by nav.js as the
+                           topbar's own first child (not inside
+                           #nav-mount) so it sits inline with the
+                           brand. Hidden above 720px.
+     - .app-sidebar /
+       .sidebar-backdrop → off-canvas drawer + dimmed backdrop, shown
+                           only at 720px and below, toggled by the
+                           hamburger via nav.js. */
+#nav-mount{ display:contents; }
+
+.appnav{
   position: sticky; top: var(--topbar-h, 64px); z-index: 190;
+  display:flex; gap:6px; align-items:center;
+  padding: 10px 24px;
+  margin: 0 -24px;
   background: hsl(var(--gold-h) 40% 6% / .82);
   backdrop-filter: blur(10px);
-  margin: 0 -24px; padding: 0 24px;
 }
-[data-mode="light"] #nav-mount{ background: hsl(0 0% 100% / .86); }
-.appnav{
-  display:flex; gap:6px; align-items:center;
-  padding: 10px 0;
-}
+[data-mode="light"] .appnav{ background: hsl(0 0% 100% / .86); }
 .appnav-item{
   display:flex; align-items:center; gap:7px;
   padding: 9px 15px;
@@ -1007,7 +1024,10 @@ textarea{ resize: vertical; min-height: 90px; }
 .appnav-icon-wrap{ position:relative; display:inline-flex; }
 /* Live "new messages" ping on the Messages tab — driven by a real-time
    Firestore listener (see notifications.js), so it's never a one-time check:
-   it updates the instant a new message lands, from whichever page is open. */
+   it updates the instant a new message lands, from whichever page is open.
+   Both the desktop .appnav and the sidebar nav render their own badge
+   element (nav.js paints every ".appnav-badge" it finds), so the count
+   stays right whichever one happens to be visible. */
 .appnav-badge{
   position:absolute; top:-6px; right:-8px;
   min-width:15px; height:15px; padding:0 3px;
@@ -1019,30 +1039,75 @@ textarea{ resize: vertical; min-height: 90px; }
 }
 .appnav-label{ display:inline; }
 
-body{ padding-bottom: 0; }
+/* ---- hamburger toggle (topbar's first child on small screens) ---- */
+.nav-toggle{
+  display:none; align-items:center; justify-content:center;
+  width:36px; height:36px; margin-right:2px; padding:0; flex-shrink:0;
+  border:1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--bg-inset); cursor:pointer;
+}
+.nav-toggle-bars{ display:flex; flex-direction:column; gap:4px; width:16px; }
+.nav-toggle-bars span{ display:block; height:2px; border-radius:1px; background: var(--user-font-color); }
+
+/* ---- off-canvas sidebar + backdrop ---- */
+.sidebar-backdrop{
+  position:fixed; inset:0; z-index:290;
+  background: rgba(0,0,0,.55);
+  opacity:0; pointer-events:none;
+  transition: opacity .25s ease;
+}
+.sidebar-backdrop.open{ opacity:1; pointer-events:auto; }
+
+.app-sidebar{
+  position:fixed; top:0; left:0; bottom:0; z-index:300;
+  width: min(78vw, 280px);
+  display:flex; flex-direction:column;
+  background: var(--bg-raised);
+  border-right: 1px solid var(--line);
+  box-shadow: 10px 0 30px var(--shadow);
+  transform: translateX(-100%);
+  transition: transform .28s ease;
+  padding: calc(18px + env(safe-area-inset-top, 0px)) 14px calc(18px + env(safe-area-inset-bottom, 0px));
+}
+.app-sidebar.open{ transform: translateX(0); }
+/* Set on <body> by nav.js while the drawer is open, so the page behind it
+   can't scroll along with it (fingers on the backdrop area otherwise drag
+   the underlying page instead of just dismissing the drawer). */
+body.sidebar-lock-scroll{ overflow:hidden; }
+.sidebar-head{
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom: 18px; padding-bottom:14px; border-bottom:1px solid var(--line);
+}
+.sidebar-brand{
+  font-family: var(--font-display); font-size:17px; font-weight:700;
+  letter-spacing:.04em; text-transform:uppercase; color: var(--user-font-color);
+}
+.sidebar-brand em{
+  color: var(--accent); font-style:normal;
+  background: linear-gradient(90deg, var(--teal), var(--accent), var(--accent-soft), var(--teal));
+  background-size: 300% 100%; -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; animation: shimmer-sweep 6s linear infinite;
+}
+.sidebar-close{
+  width:30px; height:30px; border:none; border-radius: var(--radius-sm);
+  background: var(--bg-inset); color: var(--text-muted); cursor:pointer; font-size:15px; line-height:1;
+}
+.sidebar-nav{ display:flex; flex-direction:column; gap:4px; overflow-y:auto; }
+.sidebar-nav .appnav-item{ padding:12px 14px; font-size:14px; }
+.sidebar-nav .appnav-icon{ font-size:18px; }
 
 @media (max-width: 720px){
-  /* env(safe-area-inset-bottom) accounts for the gesture bar on modern
-     Android phones (this app installs as a standalone PWA per manifest.json)
-     so the fixed nav — and the content scrolled behind it — never sits
-     under, or gets covered by, the system navigation area. Needs
-     viewport-fit=cover on the <meta name="viewport"> tag to take effect. */
-  body{ padding-bottom: calc(var(--nav-h) + 14px + env(safe-area-inset-bottom, 0px)); }
-  #nav-mount{
-    position: fixed; left:10px; right:10px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 80;
-    background: var(--bg-raised);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    box-shadow: 0 -6px 26px var(--shadow), 0 0 0 1px hsl(var(--gold-h) var(--gold-s) var(--gold-l) / .12);
-  }
-  .appnav{ justify-content: space-between; padding: 6px 8px; height: var(--nav-h); }
-  .appnav-item{
-    flex-direction: column; gap:2px; flex:1;
-    padding: 6px 2px; border-radius: var(--radius-sm); text-align:center;
-  }
-  .appnav-label{ font-size:10px; }
+  .nav-toggle{ display:inline-flex; }
+  .appnav{ display:none; }
   .topbar .btn.ghost.small{ padding: 7px 12px; }
   .toast-root{ left:12px; right:12px; top:78px; max-width:none; }
+}
+/* Above 720px the sidebar/backdrop stay fully out of the picture — hard
+   override rather than relying on the closed-state transform/opacity, so
+   a drawer left open on a phone can never bleed into a resized/rotated
+   wide viewport. */
+@media (min-width: 721px){
+  .sidebar-backdrop, .app-sidebar{ display:none !important; }
 }
 
 /* ---- search & filters (Discover / Home) ---- */
