@@ -137,9 +137,9 @@
       </div>
       <div id="pw-email-form">
         <label>Current password</label>
-        <input id="pw-current" type="password" autocomplete="current-password" placeholder="Current password">
+        <input id="pw-current" type="password" autocomplete="off" placeholder="Current password">
         <label>New password</label>
-        <input id="pw-new" type="password" autocomplete="new-password" placeholder="At least 6 characters">
+        <input id="pw-new" type="password" autocomplete="new-password" placeholder="At least 8 characters">
         <label>Confirm new password</label>
         <input id="pw-confirm" type="password" autocomplete="new-password" placeholder="Retype new password">
         <p class="field-hint" id="pw-error" style="display:none; color:#ff9ab3;"></p>
@@ -174,7 +174,7 @@
 
       <div id="delete-email-form" style="display:none;">
         <label>Current password</label>
-        <input id="delete-password" type="password" autocomplete="current-password" placeholder="Confirm your password">
+        <input id="delete-password" type="password" autocomplete="off" placeholder="Confirm your password">
       </div>
 
       <label>Type DELETE to confirm</label>
@@ -200,6 +200,7 @@
     import { startPresence } from "./presence.js";
     import { initNotifications, showToast } from "./notifications.js";
     import { loaderTrackHtml, addPasswordToggle } from "./common.js";
+    import { attachPasswordHelper, attachMatchHint, scorePassword } from "./password-tools.js";
     initTheme();
     renderNav("settings");
     document.body.insertAdjacentHTML("beforeend", loaderTrackHtml("Loading Theme"));
@@ -232,6 +233,12 @@
 
     // ---- Password & security ----
     ["#pw-current", "#pw-new", "#pw-confirm"].forEach(sel => addPasswordToggle(document.querySelector(sel)));
+    attachPasswordHelper(document.querySelector("#pw-new"), {
+      getEmail: () => auth.currentUser?.email || "",
+      getName: () => auth.currentUser?.displayName || "",
+      matchInput: document.querySelector("#pw-confirm")
+    });
+    attachMatchHint(document.querySelector("#pw-new"), document.querySelector("#pw-confirm"));
     const pwError = document.querySelector("#pw-error");
     const showPwError = msg => { pwError.textContent = msg; pwError.style.display = "block"; };
     document.querySelector("#pw-update-btn").addEventListener("click", async () => {
@@ -240,7 +247,9 @@
       const next = document.querySelector("#pw-new").value;
       const confirm = document.querySelector("#pw-confirm").value;
       if (!current) return showPwError("Enter your current password.");
-      if (next.length < 6) return showPwError("New password needs to be at least 6 characters.");
+      if (next.length < 8) return showPwError("New password needs to be at least 8 characters.");
+      if (scorePassword(next, { email: auth.currentUser?.email || "", name: auth.currentUser?.displayName || "" }).score < 2) return showPwError("That password is too easy to guess — try the suggestion button.");
+      if (next === current) return showPwError("Your new password must be different from the current one.");
       if (next !== confirm) return showPwError("New passwords don't match.");
       const btn = document.querySelector("#pw-update-btn");
       btn.disabled = true; btn.textContent = "Updating…";

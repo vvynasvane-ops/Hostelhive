@@ -5,6 +5,8 @@ import {
 } from "./firebase-init.js";
 import { loaderBlobHtml, addPasswordToggle } from "./common.js";
 import { showToast } from "./notifications.js";
+import { attachPasswordHelper } from "./password-tools.js";
+import { scorePassword } from "./password-tools.js";
 
 const form = document.querySelector("#auth-form");
 const tabLogin = document.querySelector("#tab-login");
@@ -13,8 +15,19 @@ const nameField = document.querySelector("#name-field");
 const submitBtn = document.querySelector("#auth-submit");
 const errorBox = document.querySelector("#auth-error");
 const forgotLink = document.querySelector("#forgot-link");
-addPasswordToggle(document.querySelector("#password"));
+const passwordInput = document.querySelector("#password");
+const emailInput = document.querySelector("#email");
+const nameInput = document.querySelector("#name");
+addPasswordToggle(passwordInput);
+// Strength meter + generator only appear on Sign up — logging in needs neither.
+const helper = attachPasswordHelper(passwordInput, {
+  getEmail: () => emailInput.value,
+  getName: () => nameInput.value
+});
+const helperPanel = passwordInput.closest(".pw-field").parentNode.querySelector(".pw-helper");
 let mode = "login";
+let userTypedPw = false; // distinguishes a browser-filled password from one the person typed
+["keydown", "paste"].forEach(ev => passwordInput.addEventListener(ev, () => { userTypedPw = true; }));
 
 function setMode(next) {
   mode = next;
@@ -23,9 +36,17 @@ function setMode(next) {
   nameField.style.display = mode === "signup" ? "block" : "none";
   submitBtn.textContent = mode === "signup" ? "Create account" : "Log in";
   errorBox.textContent = "";
+  // Logging in: let the browser offer the saved password. Signing up: it must NOT
+  // (and "new-password" also lets password managers suggest a fresh one).
+  passwordInput.setAttribute("autocomplete", mode === "signup" ? "new-password" : "current-password");
+  if (helperPanel) helperPanel.style.display = mode === "signup" ? "block" : "none";
+  forgotLink.parentNode.style.display = mode === "signup" ? "none" : "";
+  if (mode === "signup" && !userTypedPw) passwordInput.value = ""; // drop a browser-filled saved password
+  if (helper) helper.update();
 }
 tabLogin.addEventListener("click", () => setMode("login"));
 tabSignup.addEventListener("click", () => setMode("signup"));
+setMode("login"); // initial state: hides the signup-only helper
 
 /** Creates the Firestore profile doc for a brand-new student, the first time they sign in. */
 async function ensureProfileDoc(user, displayName) {
@@ -55,6 +76,11 @@ form.addEventListener("submit", async (e) => {
   const email = document.querySelector("#email").value.trim();
   const password = document.querySelector("#password").value;
   const name = document.querySelector("#name").value.trim();
+  if (mode === "signup") {
+    const r = scorePassword(password, { email, name });
+    if (password.length < 8) { errorBox.textContent = "Use at least 8 characters for a new password."; return; }
+    if (r.score < 2) { errorBox.textContent = "That password is too easy to guess" + (r.warning ? " — " + r.warning.toLowerCase() : ".") + " Try the suggestion button."; return; }
+  }
   const originalLabel = submitBtn.textContent;
   submitBtn.disabled = true;
   submitBtn.innerHTML = loaderBlobHtml();
@@ -109,7 +135,7 @@ function friendlyError(err) {
   const code = err.code || "";
   if (code.includes("wrong-password") || code.includes("user-not-found") || code.includes("invalid-credential")) return "Email or password is incorrect.";
   if (code.includes("email-already-in-use")) return "That email already has an account — try logging in instead.";
-  if (code.includes("weak-password")) return "Password should be at least 6 characters.";
+  if (code.includes("weak-password")) return "That password is too weak — use at least 8 characters.";
   if (code.includes("invalid-email")) return "That doesn't look like a valid email address.";
   return "Something went wrong. Please try again.";
 }

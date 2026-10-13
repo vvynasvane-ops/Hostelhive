@@ -1,6 +1,7 @@
 import { initStarfield } from "./starfield.js";
 import { showToast } from "./notifications.js";
 import { initAppearance } from "./appearance.js";
+import { initAutofillGuard } from "./autofill-guard.js";
 
 const root = document.documentElement;
 
@@ -35,6 +36,7 @@ function applyMode(mode) {
 export function initTheme() {
   initStarfield();
   initAppearance();
+  initAutofillGuard(); // every page: stop stray email/password autofill in fields that don't need it
 
   const savedMode = localStorage.getItem("lw-mode") || "dark";
   applyMode(savedMode);

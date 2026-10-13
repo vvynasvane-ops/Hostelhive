@@ -255,3 +255,10 @@ the memory/skills-style file layout) but the product itself is different:
   site — deliberately with no single-page-app rewrite, which is what
   caused the `firebase-config.js` "Unexpected token '<'" error if you hit
   that before this file existed.
+
+## 10. Password safety & autofill guard
+- `autofill-guard.js` (started by `initTheme()` on every page) stops browsers and password managers from filling email/password into fields that don't need them. Everything is guarded by default; the log-in form opts back in with `data-autofill="allow"`, and any field can force-opt-out with `data-autofill="block"`.
+- `addPasswordToggle()` (common.js) is a safe reveal: auto-masks after 10s, when the tab is hidden, the window loses focus, or the page is left. It also warns when Caps Lock is on.
+- `password-tools.js` adds the live strength meter + checklist, a cryptographically random password suggester, safe copy (clipboard cleared after 30s), and a live "passwords match" hint. Used on Sign up and Settings → Password & security.
+- Firebase stores only a salted hash of each password, so a password can never be read back later — it can only be viewed while it's being created or changed.
+- New passwords need at least 8 characters and a score of "Okay" or better. Existing 6-character passwords still log in.

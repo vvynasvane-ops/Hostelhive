@@ -503,6 +503,31 @@ textarea{ resize: vertical; min-height: 90px; }
 .pw-field .chat-pin-input{ padding-left:44px; }
 .chat-lock-screen .pw-field{ max-width:200px; }
 
+/* Safe reveal countdown: a thin bar under the field that drains over the 10s a password stays visible. */
+.pw-countdown{
+  position:absolute; left:10px; right:10px; bottom:0; height:2px; border-radius:2px;
+  background: var(--accent); transform-origin:left center; transform:scaleX(0); opacity:0; pointer-events:none;
+}
+.pw-countdown.running{ opacity:.85; animation: pw-drain 10s linear forwards; }
+@keyframes pw-drain{ from{ transform:scaleX(1); } to{ transform:scaleX(0); } }
+.pw-toggle.revealed{ color: var(--accent); }
+.caps-hint{ color:#d9b84a; margin-top:6px; }
+.caps-hint::before{ content:"\21EA  "; }
+
+/* Password strength meter + generator (password-tools.js). */
+.pw-helper{ margin-top:8px; }
+.pw-meter{ display:grid; grid-template-columns:repeat(4,1fr); gap:5px; }
+.pw-meter span{ height:5px; border-radius:var(--radius-pill); background: var(--bg-inset); transition: background .2s ease; }
+.pw-meter-label{ font-size:12px; font-weight:600; min-height:16px; margin-top:6px; }
+.pw-checks{ list-style:none; margin:6px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:4px 14px; font-size:12px; color: var(--text-muted); }
+.pw-checks li::before{ content:"\25CB  "; opacity:.7; }
+.pw-checks li.ok{ color:#8fbf5a; }
+.pw-checks li.ok::before{ content:"\2713  "; opacity:1; }
+.pw-actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+.pw-match{ min-height:16px; color:#d98a71; }
+.pw-match.ok{ color:#8fbf5a; }
+@media (prefers-reduced-motion: reduce){ .pw-countdown.running{ animation-duration:10s; } }
+
 .bg-preset-row{ display:flex; gap:12px; margin-top:8px; }
 .bg-swatch{
   display:inline-flex; align-items:center; justify-content:center;

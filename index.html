@@ -45,17 +45,17 @@
         <button id="google-btn" class="btn subtle block" type="button">Continue with Google</button>
         <div class="divider-or">or use email</div>
 
-        <form id="auth-form">
+        <form id="auth-form" data-autofill="allow">
           <div id="name-field" style="display:none;">
             <label for="name">Display name</label>
-            <input id="name" type="text" placeholder="How hostel owners will see you" autocomplete="name">
+            <input id="name" type="text" data-autofill="block" placeholder="How hostel owners will see you">
           </div>
 
           <label for="email">Email</label>
           <input id="email" type="email" required autocomplete="email">
 
           <label for="password">Password</label>
-          <input id="password" type="password" required autocomplete="current-password" minlength="6">
+          <input id="password" type="password" required autocomplete="current-password">
 
           <p id="forgot-row" style="text-align:right; margin:8px 0 0;">
             <a href="#" id="forgot-link" style="font-size:12px;">Forgot password?</a>

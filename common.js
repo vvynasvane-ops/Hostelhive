@@ -1,13 +1,25 @@
 const EYE_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>`;
 const EYE_OFF_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.8 21.8 0 0 1 5.06-6.06M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.8 21.8 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
 
+// How long a revealed password stays visible before it re-masks itself.
+const REVEAL_MS = 10000;
+
 /**
- * Adds a "show password" eye toggle to a password input, wherever it lives
- * (a static form, or a modal/lock-screen built at runtime by chat.js). Wraps
- * the input in a small positioning container (`.pw-field` in styles.css) and
- * inserts a button that flips the field between type="password" and
- * type="text" — the actual reveal, not just a masked re-display, since the
- * underlying input value never changes, only how it's rendered.
+ * Adds a *safe* "show password" eye toggle to a password input, wherever it
+ * lives (a static form, or a modal/lock-screen built at runtime by chat.js).
+ * Wraps the input in a small positioning container (`.pw-field` in
+ * styles.css) and inserts a button that flips the field between
+ * type="password" and type="text".
+ *
+ * "Safe" reveal — a visible password is a shoulder-surfing / screenshot risk,
+ * so it never stays on screen by accident:
+ *   - auto re-masks after 10 seconds (a thin countdown bar shows the time left)
+ *   - re-masks immediately if the tab is hidden, the window loses focus, or
+ *     the page is navigated away from / restored from the back-forward cache
+ *   - re-masks when the field is cleared
+ * It also shows a Caps Lock warning while the field has focus (skipped for
+ * numeric PIN fields).
+ *
  * Idempotent (safe to call twice on the same input) and a no-op if the
  * element doesn't exist, so call sites don't need to guard for either.
  */
@@ -22,16 +34,66 @@ export function addPasswordToggle(input) {
   btn.type = "button";
   btn.className = "pw-toggle";
   btn.setAttribute("aria-label", "Show password");
+  btn.title = "Show password (hides itself after 10s)";
   btn.innerHTML = EYE_ICON;
   wrap.appendChild(btn);
+
+  const bar = document.createElement("span");
+  bar.className = "pw-countdown";
+  bar.setAttribute("aria-hidden", "true");
+  wrap.appendChild(bar);
+
+  let hideTimer = null;
+  function mask() {
+    clearTimeout(hideTimer);
+    hideTimer = null;
+    bar.classList.remove("running");
+    if (input.type === "text") input.type = "password";
+    btn.innerHTML = EYE_ICON;
+    btn.setAttribute("aria-label", "Show password");
+    btn.classList.remove("revealed");
+  }
+  function reveal() {
+    input.type = "text";
+    btn.innerHTML = EYE_OFF_ICON;
+    btn.setAttribute("aria-label", "Hide password");
+    btn.classList.add("revealed");
+    // restart the countdown animation
+    bar.classList.remove("running"); void bar.offsetWidth; bar.classList.add("running");
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(mask, REVEAL_MS);
+  }
   btn.addEventListener("click", () => {
-    const revealed = input.type === "text";
-    input.type = revealed ? "password" : "text";
-    btn.innerHTML = revealed ? EYE_ICON : EYE_OFF_ICON;
-    btn.setAttribute("aria-label", revealed ? "Show password" : "Hide password");
+    if (input.type === "text") mask(); else reveal();
     // Keep focus + caret in the field after the tap, instead of losing focus to the button.
     input.focus();
   });
+  // Typing keeps the reveal alive a little longer so it doesn't vanish mid-sentence.
+  input.addEventListener("input", () => {
+    if (!input.value) return mask();
+    if (input.type === "text") reveal();
+  });
+  // Never leave a password readable when attention moves elsewhere.
+  document.addEventListener("visibilitychange", () => { if (document.hidden) mask(); });
+  window.addEventListener("blur", mask);
+  window.addEventListener("pagehide", mask);
+
+  // Caps Lock warning (not for numeric PIN pads).
+  if (input.inputMode !== "numeric") {
+    const hint = document.createElement("p");
+    hint.className = "field-hint caps-hint";
+    hint.textContent = "Caps Lock is on";
+    hint.style.display = "none";
+    hint.setAttribute("role", "status");
+    wrap.insertAdjacentElement("afterend", hint);
+    const check = e => {
+      if (typeof e.getModifierState !== "function") return;
+      hint.style.display = e.getModifierState("CapsLock") ? "block" : "none";
+    };
+    input.addEventListener("keydown", check);
+    input.addEventListener("keyup", check);
+    input.addEventListener("blur", () => { hint.style.display = "none"; });
+  }
 }
 
 /** The standard necessities checklist — shared by the Browse filters and the
